@@ -1,4 +1,10 @@
-from budget.core import add_transaction
+import csv
+from pathlib import Path
+
+from budget.core import add_transaction, get_balance
+
+
+ROOT = Path(__file__).resolve().parents[1]
 
 
 def make_transaction(
@@ -52,3 +58,26 @@ def test_add_transaction_accepts_empty_description() -> None:
     updated_transactions = add_transaction(transactions, transaction)
 
     assert updated_transactions[0]["description"] == ""
+
+
+def test_get_balance_returns_zero_for_empty_transactions() -> None:
+    assert get_balance([]) == 0.0
+
+
+def test_get_balance_sums_income_and_expenses() -> None:
+    transactions = [
+        make_transaction("3500000", "수입", "월급"),
+        make_transaction("-12000", "지출", "점심식사"),
+        make_transaction("-1500", "지출", "지하철"),
+        make_transaction("25000", "수입", "중고 판매"),
+    ]
+
+    assert get_balance(transactions) == 3511500.0
+
+
+def test_get_balance_uses_step2_transactions_csv() -> None:
+    path = ROOT / "data" / "step2_transactions.csv"
+    with path.open(encoding="utf-8-sig", newline="") as file:
+        transactions = list(csv.DictReader(file))
+
+    assert get_balance(transactions) == 24285027.0
