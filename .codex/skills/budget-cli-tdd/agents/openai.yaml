@@ -1,0 +1,3 @@
+display_name: Budget CLI TDD
+short_description: CSV 가계부 CLI 앱을 TDD와 품질 기준에 맞춰 개발
+default_prompt: Use this skill when modifying the CSV-based budget CLI app. Write tests first, keep functions typed and small, run pytest and radon cc, and request qa_engineer review before commit.
